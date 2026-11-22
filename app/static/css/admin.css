@@ -121,7 +121,9 @@ a { color: var(--lq3-blue); text-decoration: none; }
   font-weight: 500;
 }
 
-.nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+.nav-item svg { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.7; }
+.nav-item.active svg { opacity: 1; }
+.nav-item.disabled { pointer-events: none; opacity: 0.4; }
 
 .nav-badge {
   margin-left: auto;
@@ -600,10 +602,77 @@ select.form-control {
   cursor: pointer;
 }
 
+/* ── Search Input ── */
+.search-input {
+  width: 100%;
+  background: var(--lq3-bg-overlay);
+  border: 1px solid var(--lq3-border);
+  border-radius: var(--lq3-radius-md);
+  padding: 8px 12px 8px 32px;
+  color: var(--lq3-text-primary);
+  font-size: 13px;
+  font-family: var(--lq3-font);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.search-input::placeholder { color: var(--lq3-text-muted); }
+.search-input:focus { border-color: var(--lq3-blue); box-shadow: 0 0 0 3px var(--lq3-blue-dim); }
+
+/* ── Mobile Topbar ── */
+.mobile-topbar {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--lq3-bg-sidebar);
+  border-bottom: 1px solid var(--lq3-border);
+  padding: 10px 16px;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-topbar .mobile-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--lq3-text-primary);
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  color: var(--lq3-text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 55;
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .sidebar { display: none; }
-  .main-content { padding: 16px; }
+  body { flex-direction: column; }
+  .mobile-topbar { display: flex; }
+  .sidebar {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: -260px;
+    bottom: 0;
+    z-index: 60;
+    width: 250px;
+    min-width: 250px;
+    transition: left 0.25s ease;
+  }
+  .sidebar.open { left: 0; }
+  .sidebar.open ~ .sidebar-backdrop { display: block; }
+  .main-content { padding: 16px; height: auto; overflow: visible; }
   .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .form-row { grid-template-columns: 1fr; }
   .data-table { font-size: 12px; }
