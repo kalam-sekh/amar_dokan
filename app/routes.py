@@ -37,7 +37,10 @@ def update_bag():
     data=request.get_json(); product=db.session.get(Product, int(data["product_id"])); qty=Decimal(str(data["quantity_base"]))
     if not product or qty <= 0: return jsonify(error="ভুল পণ্য"), 400
     c=cart(); c[str(product.id)] = str(Decimal(c.get(str(product.id), "0")) + qty); session.modified=True
-    return bag_summary()
+    summary = bag_summary().get_json()
+    summary["product_qty"] = str(c[str(product.id)])
+    summary["base_unit"] = product.base_unit
+    return jsonify(summary)
 @bp.get("/bag/summary")
 def bag_summary():
     c=cart(); ids=[int(x) for x in c] or [-1]; products=db.session.scalars(select(Product).where(Product.id.in_(ids))).all()
