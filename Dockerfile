@@ -9,6 +9,9 @@ COPY . .
 
 ENV FLASK_APP=app:create_app
 
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
 EXPOSE ${PORT:-5000}
 
-CMD gunicorn -w 3 -b 0.0.0.0:${PORT:-5000} 'app:create_app()'
+CMD ["./entrypoint.sh"]
