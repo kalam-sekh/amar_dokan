@@ -25,6 +25,8 @@ def create_app(test_config=None):
         SQLALCHEMY_DATABASE_URI=database_url,
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         CURRENCY="৳",
+        ADMIN_EMAIL=os.getenv("ADMIN_EMAIL", "admin@example.com"),
+        ADMIN_PASSWORD=os.getenv("ADMIN_PASSWORD", "ChangeMeImmediately123!"),
     )
     if test_config: app.config.update(test_config)
     db.init_app(app); migrate.init_app(app, db); csrf.init_app(app)
