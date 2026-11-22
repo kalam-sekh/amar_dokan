@@ -1,0 +1,66 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <div class="breadcrumb">Admin &rsaquo; Categories</div>
+    <h1>Categories</h1>
+  </div>
+  <div class="page-actions">
+    <button class="btn-primary" onclick="openModal('add-cat-modal')">+ Add Category</button>
+  </div>
+</div>
+
+<div class="card">
+  <table class="data-table">
+    <thead><tr><th>Name</th><th>Products</th><th>Actions</th></tr></thead>
+    <tbody>
+    {% for c in categories %}
+    <tr>
+      <td class="cell-primary">{{ c.name_bn }}</td>
+      <td>{{ c.products|length }}</td>
+      <td>
+        <div class="action-cell">
+          <form method="post" action="/admin/category/{{ c.id }}/delete" onsubmit="return confirm('Delete this category? Products in it must be moved first.')">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn-danger btn-sm" type="submit">Delete</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="modal-overlay" id="add-cat-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add Category</h3>
+      <button class="modal-close" onclick="closeModal('add-cat-modal')">&times;</button>
+    </div>
+    <form method="post" action="/admin/category/add">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Category Name (Bengali)</label>
+          <input class="form-control" name="name_bn" placeholder="e.g. মসলা" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" onclick="closeModal('add-cat-modal')">Cancel</button>
+        <button type="submit" class="btn-primary">Add Category</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+</script>
+{% endblock %}
